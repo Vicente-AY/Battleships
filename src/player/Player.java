@@ -26,4 +26,16 @@ public class Player {
 
         Player newPlayer = new Player(name);
     }
+
+    //Getters y Setters
+
+    public Ship[] getShips(){
+        return ships;
+    }
+    public NavalBattle getNavalBattle(){
+        return navalBattle;
+    }
+    public String getName(){
+        return name;
+    }
 }

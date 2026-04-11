@@ -9,21 +9,25 @@ public class NavalBattle {
     Ship[][] grid = new Ship[10][10];
     Enum[][] board = new Enum[10][10];
 
-    public void setPosition(Ship ship, int x, int y, boolean horizontal){
+    public boolean setPosition(Ship ship, int x, int y, boolean horizontal){
 
         int size = ship.size;
 
         if(horizontal && (x + size > 10)){
             System.out.println("The ship is out of the Naval Battle");
-            return;
+            return false;
         }
-        if(!horizontal && (x + size > 10)){
+        if(!horizontal && (y + size > 10)){
             System.out.println("The ship is out of the Naval Battle");
-            return;
+            return false;
         }
 
         if(canPlace(x, y, horizontal, ship)){
             setShips(x, y, horizontal, ship);
+            return true;
+        }
+        else {
+            return false;
         }
     }
 

@@ -60,4 +60,14 @@ public class IA {
             }
         }
     }
+
+    public Ship[] getShips(){
+        return ships;
+    }
+    public NavalBattle getNavalBattle(){
+        return navalBattle;
+    }
+    public String getName(){
+        return name;
+    }
 }
