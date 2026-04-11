@@ -10,9 +10,10 @@ import java.util.Scanner;
 public class Player {
 
     String name = null;
-    NavalBattle navalBattle = null;
+    NavalBattle navalBattle = new NavalBattle();
     ArrayList<Point> shoted = new ArrayList<Point>();
     Ship[] ships = new Ship[]{new Ship(1), new Ship(2), new Ship(3), new Ship(4), new Ship(5)};
+    boolean lost = false;
 
     public Player(String name){
 
@@ -27,6 +28,45 @@ public class Player {
         Player newPlayer = new Player(name);
     }
 
+    public void shot(IA cpu){
+
+        Scanner input = new Scanner(System.in);
+        boolean canShot = false;
+        NavalBattle navalB = cpu.getNavalBattle();
+
+
+        System.out.println("Enter X Coordinates");
+        int x = input.nextInt();
+        input.nextLine();
+        System.out.println("Enter Y Coordinates");
+        int y = input.nextInt();
+        input.nextLine();
+
+        Point aim = new Point(x, y);
+
+        if (!shoted.contains(aim)) {
+            canShot = true;
+            navalB.shot(x, y);
+            shoted.add(aim);
+        }
+
+        cpu.getNavalBattle().shot(x, y);
+        cpu.checkDefeated();
+    }
+
+    public void checkDefeated(){
+
+        boolean defeated = true;
+
+        for(Ship ship : this.ships){
+            if(!ship.getSunk()){
+                defeated = false;
+                break;
+            }
+        }
+        this.lost = defeated;
+    }
+
     //Getters y Setters
 
     public Ship[] getShips(){
@@ -37,5 +77,8 @@ public class Player {
     }
     public String getName(){
         return name;
+    }
+    public boolean getLost(){
+        return lost;
     }
 }

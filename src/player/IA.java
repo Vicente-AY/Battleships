@@ -12,9 +12,10 @@ import java.util.Random;
 public class IA {
 
     String name = "A.D.M.I.R.A.L";
-    NavalBattle navalBattle = null;
+    NavalBattle navalBattle = new  NavalBattle();
     ArrayList<Point> shoted = new ArrayList<Point>();
     Ship[] ships = new Ship[]{new Ship(1), new Ship(2), new Ship(3), new Ship(4), new Ship(5)};
+    boolean lost = false;
 
     public void iaShipPositioning(NavalBattle navalB, Ship ship){
 
@@ -39,10 +40,11 @@ public class IA {
         }
     }
 
-    public void shot(NavalBattle navalB) {
+    public void shot(Player player) {
+
+        NavalBattle navalB = player.getNavalBattle();
 
         boolean canShot = false;
-        boolean pointShoted = false;
         Random rand = new Random();
         int x = 0, y = 0;
 
@@ -54,11 +56,24 @@ public class IA {
 
             if (!shoted.contains(aim)) {
                 canShot = true;
-                Impact result = navalB.shot(x, y);
+                navalB.shot(x, y);
                 shoted.add(aim);
-                navalB.registerImpact(result, x, y);
             }
         }
+        player.checkDefeated();
+    }
+
+    public void checkDefeated(){
+
+        boolean defeated = true;
+
+        for(Ship ship : this.ships){
+            if(!ship.getSunk()){
+                defeated = false;
+                break;
+            }
+        }
+        this.lost = defeated;
     }
 
     public Ship[] getShips(){
@@ -69,5 +84,8 @@ public class IA {
     }
     public String getName(){
         return name;
+    }
+    public boolean getLost(){
+        return lost;
     }
 }

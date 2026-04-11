@@ -31,25 +31,22 @@ public class NavalBattle {
         }
     }
 
-    public Impact shot(int x, int y){
+    public void shot(int x, int y){
 
         Ship ship = grid[x][y];
 
         if(ship != null){
             ship.hit();
             if(ship.getSunk()) {
-                return Impact.Sunk;
+                this.board[x][y] = Impact.Sunk;
             }
             else{
-                return Impact.Hit;
+                this.board[x][y] = Impact.Hit;
             }
         }
-        return Impact.Miss;
-    }
-
-    public void registerImpact(Impact impact, int x, int y){
-
-        this.board[x][y] = impact;
+        else {
+            this.board[x][y] = Impact.Miss;
+        }
     }
 
     public boolean canPlace(int x, int y, boolean horizontal, Ship ship){

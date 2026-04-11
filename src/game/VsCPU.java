@@ -17,13 +17,13 @@ public class VsCPU {
         initialPositioning(player,cpu);
 
         while(true){
-            playerTurn(player, cpu);
-            if(checkLost(cpu.getShips())){
+            player.shot(cpu);
+            if(cpu.getLost()){
                 System.out.println(player.getName() + " Won the game");
                 break;
             }
-            cpuTurn(player, cpu);
-            if(checkLost(cpu.getShips())){
+            cpu.shot(player);
+            if(player.getLost()){
                 System.out.println(cpu.getName() + " Won the game");
                 break;
             }
@@ -36,11 +36,14 @@ public class VsCPU {
         int x = 0, y = 0;
         boolean horizontal = false;
         boolean shipSet = false;
+        Ship ship = null;
 
         for(int i = 0; i < player.getShips().length; i++){
 
+            shipSet = false;
+
             while(!shipSet) {
-                Ship ship = player.getShips()[i];
+                ship = player.getShips()[i];
 
                 System.out.println("Positioning Ship: " + ship.getSize());
 
@@ -66,34 +69,5 @@ public class VsCPU {
         for(int i = 0; i < cpu.getShips().length; i++){
             cpu.iaShipPositioning(cpu.getNavalBattle(), cpu.getShips()[i]);
         }
-    }
-
-    public void playerTurn(Player player, IA cpu){
-
-        Scanner input = new Scanner(System.in);
-
-        System.out.println("Enter X Coordinates");
-        int x = input.nextInt();
-        input.nextLine();
-        System.out.println("Enter Y Coordinates");
-        int y = input.nextInt();
-        input.nextLine();
-
-        cpu.getNavalBattle().shot(x, y);
-    }
-
-    public void cpuTurn(Player player, IA cpu){
-
-        cpu.shot(player.getNavalBattle());
-    }
-
-    public boolean checkLost(Ship[] ships){
-
-        for(Ship ship : ships){
-            if(!ship.getSunk()){
-                return false;
-            }
-        }
-        return true;
     }
 }
