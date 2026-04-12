@@ -33,19 +33,19 @@ public class NavalBattle {
 
     public void shot(int x, int y){
 
-        Ship ship = grid[x][y];
+        Ship ship = grid[y][x];
 
         if(ship != null){
             ship.hit();
             if(ship.getSunk()) {
-                this.board[x][y] = Impact.Sunk;
+                this.board[y][x] = Impact.Sunk;
             }
             else{
-                this.board[x][y] = Impact.Hit;
+                this.board[y][x] = Impact.Hit;
             }
         }
         else {
-            this.board[x][y] = Impact.Miss;
+            this.board[y][x] = Impact.Miss;
         }
     }
 
@@ -53,13 +53,13 @@ public class NavalBattle {
 
         for(int i = 0; i < ship.size; i++){
             if(horizontal){
-                if(this.grid[x + i][y] != null){
+                if(this.grid[y][x + i] != null){
                     System.out.println("The ship cannot be on the top of another");
                     return false;
                 }
             }
             else{
-                if(this.grid[x][y + i] != null){
+                if(this.grid[y + i][x] != null){
                     System.out.println("The ship cannot be on the top of another");
                     return false;
                 }
@@ -72,11 +72,11 @@ public class NavalBattle {
 
         for(int i = 0; i < ship.size; i++){
             if(horizontal){
-                this.grid[x + i][y] = ship;
+                this.grid[y][x + i] = ship;
                 ship.position[i] = new Point(x + i, y);
             }
             else{
-                this.grid[x][y + i] = ship;
+                this.grid[y + i][x] = ship;
                 ship.position[i] = new Point(x, y + i);
             }
         }

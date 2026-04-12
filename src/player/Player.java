@@ -12,20 +12,12 @@ public class Player {
     String name = null;
     NavalBattle navalBattle = new NavalBattle();
     ArrayList<Point> shoted = new ArrayList<Point>();
-    Ship[] ships = new Ship[]{new Ship(1), new Ship(2), new Ship(3), new Ship(4), new Ship(5)};
+    Ship[] ships = new Ship[]{new Ship("Carrier", 5), new Ship("Battleship", 4), new Ship("Cruiser", 3), new Ship("Submarine", 2), new Ship("Patrol Boat", 1)};
     boolean lost = false;
 
     public Player(String name){
 
         this.name = name;
-    }
-
-    public static void createPlayer(){
-
-        Scanner input = new Scanner(System.in);
-        String name = input.nextLine();
-
-        Player newPlayer = new Player(name);
     }
 
     public void shot(IA cpu){
@@ -50,7 +42,6 @@ public class Player {
             shoted.add(aim);
         }
 
-        cpu.getNavalBattle().shot(x, y);
         cpu.checkDefeated();
     }
 

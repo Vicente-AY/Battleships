@@ -4,12 +4,14 @@ import java.awt.*;
 
 public class Ship {
 
+    String name = "";
     int size = 0;
     Point[] position = null;
     int hits = 0;
     boolean sunk = false;
 
-    public Ship(int size){
+    public Ship(String name, int size){
+        this.name = name;
         this.size = size;
         this.position = new Point[size];
     }
@@ -19,6 +21,11 @@ public class Ship {
         if(hits == size){
             this.sunk = true;
         }
+    }
+
+    @Override
+    public String toString() {
+        return this.name; // Así el JComboBox mostrará "Carrier", "Battleship", etc.
     }
 
     //Getters & Setters

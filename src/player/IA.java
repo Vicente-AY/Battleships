@@ -14,7 +14,7 @@ public class IA {
     String name = "A.D.M.I.R.A.L";
     NavalBattle navalBattle = new  NavalBattle();
     ArrayList<Point> shoted = new ArrayList<Point>();
-    Ship[] ships = new Ship[]{new Ship(1), new Ship(2), new Ship(3), new Ship(4), new Ship(5)};
+    Ship[] ships = new Ship[]{new Ship("Carrier", 5), new Ship("Battleship", 4), new Ship("Cruiser", 3), new Ship("Submarine", 2), new Ship("Patrol Boat", 1)};
     boolean lost = false;
 
     public void iaShipPositioning(NavalBattle navalB, Ship ship){
@@ -75,6 +75,8 @@ public class IA {
         }
         this.lost = defeated;
     }
+
+    //Getters y setters
 
     public Ship[] getShips(){
         return ships;
