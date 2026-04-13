@@ -7,7 +7,7 @@ import java.awt.*;
 public class NavalBattle {
 
     Ship[][] grid = new Ship[10][10];
-    Enum[][] board = new Enum[10][10];
+    Impact[][] board = new Impact[10][10];
 
     public boolean setPosition(Ship ship, int x, int y, boolean horizontal){
 
@@ -87,7 +87,7 @@ public class NavalBattle {
     public void setGrid(Ship[][] grid){
         this.grid = grid;
     }
-    public Enum[][] getBoard() {
+    public Impact[][] getBoard() {
         return this.board;
     }
 

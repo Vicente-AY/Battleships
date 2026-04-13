@@ -39,4 +39,7 @@ public class Ship {
     public String getName(){
         return this.name;
     }
+    public Point[] getPosition(){
+        return this.position;
+    }
 }

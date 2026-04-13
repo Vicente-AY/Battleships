@@ -4,6 +4,7 @@ import player.*;
 import utils.Impact;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 
 public class IAGameWindow {
@@ -14,6 +15,10 @@ public class IAGameWindow {
     JButton[][] playerButtons = new JButton[10][10];
     JButton[][] radarButtons = new JButton[10][10];
     JFrame frame = null;
+    private TitledBorder radarBorder;
+    private TitledBorder fleetBorder;
+    private JPanel radarPanel;
+    private JPanel playerPanel;
 
     public void showIAGameWindow(Player player, IA cpu){
         this.player = player;
@@ -32,7 +37,6 @@ public class IAGameWindow {
         JPanel board =  new JPanel(new GridLayout(2, 1, 10, 10));
         board.add(createRadarPanel());
         board.add(createPlayerPanel());
-
         frame.add(board, BorderLayout.CENTER);
 
         frame.setSize(800, 800);
@@ -42,8 +46,9 @@ public class IAGameWindow {
 
     private JPanel createRadarPanel(){
 
-        JPanel radarPanel = new JPanel(new GridLayout(10, 10));
-        radarPanel.setBorder(BorderFactory.createTitledBorder("Radar"));
+        this.radarPanel = new JPanel(new GridLayout(10, 10));
+        radarBorder = BorderFactory.createTitledBorder("Radar " + countAliveCPU(cpu) + "/5 Ships Detected");
+        radarPanel.setBorder(radarBorder);
 
         for(int i = 0; i < 10; i++){
             for(int j = 0; j < 10; j++){
@@ -68,12 +73,20 @@ public class IAGameWindow {
                     }
                     else if(res == Impact.Sunk){
                         button.setBackground(Color.RED);
-                        log.append("\n" + player.getName() + ": Sunk " + ship.getName() + " at (" + x + "," + y + ")");
+                        if(ship.getSize() == 5){
+                            log.append("\n" + player.getName() + ": A pique el portaaviones (" + x + "," + y + ")");
+
+                        }
+                        else {
+                            log.append("\n" + player.getName() + ": Sunk " + ship.getName() + " at (" + x + "," + y + ")");
+                        }
                     }
                     else{
                         log.append("\n" + player.getName() + ": Miss at (" + x + "," + y + ")");
                     }
 
+                    refreshBorders();
+                    updateSunkColor();
                     cpu.checkDefeated();
                     checkGameOver();
 
@@ -89,8 +102,9 @@ public class IAGameWindow {
 
     private JPanel createPlayerPanel(){
 
-        JPanel playerPanel = new JPanel(new GridLayout(10, 10));
-        playerPanel.setBorder(BorderFactory.createTitledBorder("Fleet Status"));
+        this.playerPanel = new JPanel(new GridLayout(10, 10));
+        fleetBorder = BorderFactory.createTitledBorder("Fleet Status: " + countAlivePlayer(player) + "/5 Ships Standing by");
+        playerPanel.setBorder(fleetBorder);
 
         Ship[][] grid = player.getNavalBattle().getGrid();
 
@@ -117,7 +131,7 @@ public class IAGameWindow {
         int x = lastShot.x;
         int y = lastShot.y;
 
-        Enum res = player.getNavalBattle().getBoard()[y][x];
+        Impact res = player.getNavalBattle().getBoard()[y][x];
         Ship ship = player.getNavalBattle().getGrid()[y][x];
 
         if(res == Impact.Hit){
@@ -128,15 +142,77 @@ public class IAGameWindow {
         else if(res == Impact.Sunk){
             playerButtons[y][x].setText("X");
             playerButtons[y][x].setBackground(Color.RED);
-            log.append("\n" + cpu.getName() + ": Sunk " + ship.getName() + " at (" + x + "," + y + ")");
+
+            if(ship.getSize() == 5){
+                log.append("\n" + cpu.getName() + ": A pique el portaaviones (" + x + "," + y + ")");
+            }
+            else {
+                log.append("\n" + cpu.getName() + ": Sunk " + ship.getName() + " at (" + x + "," + y + ")");
+            }
         }
         else{
             playerButtons[y][x].setText("X");
             log.append("\n" + cpu.getName() + ": Miss at (" + x + "," + y + ")");
         }
 
+        refreshBorders();
+        updateSunkColor();
         player.checkDefeated();
         checkGameOver();
+    }
+
+    private int countAlivePlayer(Player player){
+
+        int alive = 0;
+        for(Ship ship : player.getShips()){
+            if(!ship.getSunk()){
+                alive++;
+            }
+        }
+        return alive;
+    }
+    private int countAliveCPU(IA cpu){
+
+        int alive = 0;
+        for(Ship ship : cpu.getShips()){
+            if(!ship.getSunk()){
+                alive++;
+            }
+        }
+        return alive;
+    }
+
+    private void updateSunkColor(){
+
+        for(Ship ship : player.getShips()){
+            if(ship.getSunk()){
+                for(Point point : ship.getPosition()){
+                    playerButtons[point.y][point.x].setBackground(new Color(150, 0, 0));
+                }
+            }
+        }
+        for(Ship ship : cpu.getShips()){
+            if(ship.getSunk()){
+                for(Point point : ship.getPosition()){
+                    radarButtons[point.y][point.x].setBackground(new Color(150, 0, 0));
+                }
+            }
+        }
+    }
+
+    private void refreshBorders(){
+        if(radarBorder != null) {
+            radarBorder = BorderFactory.createTitledBorder("Radar " + countAliveCPU(cpu) + "/5 Ships Detected");
+            radarPanel.setBorder(radarBorder);
+            radarPanel.revalidate();
+            radarPanel.repaint();
+        }
+        if(fleetBorder != null) {
+            fleetBorder = BorderFactory.createTitledBorder("Fleet Status: " + countAlivePlayer(player) + "/5 Ships Standing by");
+            playerPanel.setBorder(fleetBorder);
+            playerPanel.revalidate();
+            playerPanel.repaint();
+        }
     }
 
     private void checkGameOver(){
