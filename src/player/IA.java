@@ -17,25 +17,31 @@ public class IA {
     Ship[] ships = new Ship[]{new Ship("Carrier", 5), new Ship("Battleship", 4), new Ship("Cruiser", 3), new Ship("Submarine", 2), new Ship("Patrol Boat", 1)};
     boolean lost = false;
 
-    public void iaShipPositioning(NavalBattle navalB, Ship ship){
+    public void iaShipPositioning(){
 
         Random rand = new Random();
-        boolean horizontal = rand.nextBoolean();
+        boolean horizontal = true;
         boolean cont = true;
         int x, y = 0;
+        boolean placed = false;
 
-        while(cont) {
-            if (horizontal) {
-                x = rand.nextInt(10 - ship.getSize());
-                y = rand.nextInt(10);
-            } else {
-                x = rand.nextInt(10);
-                y = rand.nextInt(10 - ship.getSize());
-            }
+        for(Ship ship : ships) {
+            placed = false;
+            while (!placed) {
+                horizontal = rand.nextBoolean();
 
-            if (navalB.canPlace(x, y, horizontal, ship)) {
-                navalB.setShips(x, y, horizontal, ship);
-                cont = false;
+                if (horizontal) {
+                    x = rand.nextInt(10 - ship.getSize());
+                    y = rand.nextInt(10);
+                } else {
+                    x = rand.nextInt(10);
+                    y = rand.nextInt(10 - ship.getSize());
+                }
+
+                if (this.navalBattle.canPlace(x, y, horizontal, ship)) {
+                    this.navalBattle.setShips(x, y, horizontal, ship);
+                    placed = true;
+                }
             }
         }
     }
@@ -89,5 +95,8 @@ public class IA {
     }
     public boolean getLost(){
         return lost;
+    }
+    public ArrayList<Point> getShoted() {
+        return this.shoted;
     }
 }

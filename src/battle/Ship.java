@@ -36,4 +36,7 @@ public class Ship {
     public int getSize(){
         return this.size;
     }
+    public String getName(){
+        return this.name;
+    }
 }

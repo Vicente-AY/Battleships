@@ -87,4 +87,11 @@ public class NavalBattle {
     public void setGrid(Ship[][] grid){
         this.grid = grid;
     }
+    public Enum[][] getBoard() {
+        return this.board;
+    }
+
+    public Ship[][] getGrid() {
+        return this.grid;
+    }
 }

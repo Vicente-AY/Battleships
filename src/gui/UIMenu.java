@@ -61,6 +61,8 @@ public class UIMenu {
                 Player player = new Player(name);
                 IA cpu = new IA();
 
+                cpu.iaShipPositioning();
+
                 PlacementWindow pW = new PlacementWindow();
 
                 pW.showPlacementWindow(player, cpu);

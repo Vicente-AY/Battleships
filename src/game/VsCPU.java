@@ -67,7 +67,7 @@ public class VsCPU {
         }
 
         for(int i = 0; i < cpu.getShips().length; i++){
-            cpu.iaShipPositioning(cpu.getNavalBattle(), cpu.getShips()[i]);
+            cpu.iaShipPositioning();
         }
     }
 }
