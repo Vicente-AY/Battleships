@@ -64,7 +64,7 @@ public class IAGameWindow {
                     button.setText("X");
                     button.setEnabled(false);
 
-                    Object res = cpu.getNavalBattle().getBoard()[y][x];
+                    Impact res = cpu.getNavalBattle().getBoard()[y][x];
                     Ship ship = cpu.getNavalBattle().getGrid()[y][x];
 
                     if(res == Impact.Hit){
@@ -130,17 +130,16 @@ public class IAGameWindow {
         Point lastShot = cpu.getShoted().get(cpu.getShoted().size() -1);
         int x = lastShot.x;
         int y = lastShot.y;
+        playerButtons[y][x].setText("X");
 
         Impact res = player.getNavalBattle().getBoard()[y][x];
         Ship ship = player.getNavalBattle().getGrid()[y][x];
 
         if(res == Impact.Hit){
-            playerButtons[y][x].setText("X");
             playerButtons[y][x].setBackground(Color.RED);
             log.append("\n" + cpu.getName() + ": Hit at (" + x + "," + y + ")");
         }
         else if(res == Impact.Sunk){
-            playerButtons[y][x].setText("X");
             playerButtons[y][x].setBackground(Color.RED);
 
             if(ship.getSize() == 5){
@@ -151,7 +150,6 @@ public class IAGameWindow {
             }
         }
         else{
-            playerButtons[y][x].setText("X");
             log.append("\n" + cpu.getName() + ": Miss at (" + x + "," + y + ")");
         }
 
