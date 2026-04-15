@@ -15,10 +15,10 @@ public class IAGameWindow {
     JButton[][] playerButtons = new JButton[10][10];
     JButton[][] radarButtons = new JButton[10][10];
     JFrame frame = null;
-    private TitledBorder radarBorder;
-    private TitledBorder fleetBorder;
-    private JPanel radarPanel;
-    private JPanel playerPanel;
+    TitledBorder radarBorder;
+    TitledBorder fleetBorder;
+    JPanel radarPanel;
+    JPanel playerPanel;
 
     public void showIAGameWindow(Player player, IA cpu){
         this.player = player;
@@ -199,6 +199,7 @@ public class IAGameWindow {
     }
 
     private void refreshBorders(){
+
         if(radarBorder != null) {
             radarBorder = BorderFactory.createTitledBorder("Radar " + countAliveCPU(cpu) + "/5 Ships Detected");
             radarPanel.setBorder(radarBorder);
