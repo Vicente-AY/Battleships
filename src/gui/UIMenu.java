@@ -1,5 +1,6 @@
 package gui;
 
+import game.VsCPU;
 import player.IA;
 import player.Player;
 
@@ -63,9 +64,12 @@ public class UIMenu {
 
                 cpu.iaShipPositioning();
 
-                PlacementWindow pW = new PlacementWindow();
+                frame.dispose();
 
-                pW.showPlacementWindow(player, cpu);
+                PlacementWindow pW = new PlacementWindow();
+                Player player2 = null;
+                boolean isPvP = false;
+                pW.showPlacementWindow(player, player2, cpu, isPvP);
             }
         });
         dialog.add(accept);
@@ -81,20 +85,25 @@ public class UIMenu {
         dialog.add(new JLabel("Enter the Player 1´s Name", SwingConstants.CENTER));
         JTextField name1Field = new JTextField();
         dialog.add(name1Field);
-        dialog.add(new JLabel("Enter Player 2´s Name", SwingConstants.CENTER));
-        JTextField name2Field = new JTextField();
-        dialog.add(name2Field);
 
-        JButton accept = new JButton("Accept");
+        JButton accept = new JButton("Player 1 Position Fleet");
         accept.addActionListener(e -> {
             String name1 = name1Field.getText();
-            String name2 = name2Field.getText();
-            if(!name1.isEmpty() && !name2.isEmpty()){
+            if(!name1.isEmpty()){
                 dialog.dispose();
                 frame.dispose();
                 Player player1 = new Player(name1);
-                Player player2 = new Player(name2);
+                PlacementWindow pW = new PlacementWindow();
+
+                Player player2 = null;
+                IA cpu = null;
+                boolean isPvP = true;
+                pW.showPlacementWindow(player1, player2, cpu, isPvP);
             }
         });
+
+        dialog.add(accept);
+        dialog.setLocationRelativeTo(frame);
+        dialog.setVisible(true);
     }
 }

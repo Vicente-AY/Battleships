@@ -56,7 +56,6 @@ public class IAGameWindow {
                 radarButtons[i][j] = button;
                 int x = j;
                 int y = i;
-                button.setBackground(Color.BLUE);
 
                 button.addActionListener(e -> {
                     cpu.getNavalBattle().shot(x, y);
@@ -82,6 +81,7 @@ public class IAGameWindow {
                         }
                     }
                     else{
+                        button.setBackground(Color.BLUE);
                         log.append("\n" + player.getName() + ": Miss at (" + x + "," + y + ")");
                     }
 
@@ -150,6 +150,7 @@ public class IAGameWindow {
             }
         }
         else{
+            playerButtons[y][x].setBackground(Color.BLUE);
             log.append("\n" + cpu.getName() + ": Miss at (" + x + "," + y + ")");
         }
 

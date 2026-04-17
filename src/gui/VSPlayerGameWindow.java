@@ -14,7 +14,8 @@ public class VSPlayerGameWindow {
 
     Player player1 = null;
     Player player2 = null;
-    JTextArea log = null;
+    JTextArea log1 = null;
+    JTextArea log2 = null;
     JButton[][] player1Buttons = new JButton[10][10];
     JButton[][] player2Buttons = new JButton[10][10];
     JButton[][] player1RadarButtons = new JButton[10][10];
@@ -45,18 +46,22 @@ public class VSPlayerGameWindow {
         player2Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         player2Frame.setLayout(new BorderLayout());
 
-        log = new JTextArea(10, 25);
-        log.setEditable(false);
-        log.append("Naval Battle Begins!");
-        player1Frame.add(log, BorderLayout.EAST);
-        player2Frame.add(log, BorderLayout.EAST);
+        log1 = new JTextArea(10, 25);
+        log1.setEditable(false);
+        log1.append("Naval Battle Begins!");
+        player1Frame.add(log1, BorderLayout.EAST);
 
-        JPanel player1Board = new JPanel();
+        log2 = new JTextArea(10, 25);
+        log2.setEditable(false);
+        log2.append("Naval Battle Begins!");
+        player2Frame.add(log2, BorderLayout.EAST);
+
+        JPanel player1Board = new JPanel(new GridLayout(2, 1, 10, 10));
         player1Board.add(createPlayer1RadarPanel());
         player1Board.add(createPlayer1Panel());
         player1Frame.add(player1Board, BorderLayout.CENTER);
 
-        JPanel player2Board = new JPanel();
+        JPanel player2Board = new JPanel(new GridLayout(2, 1, 10, 10));
         player2Board.add(createPlayer2RadarPanel());
         player2Board.add(createPlayer2Panel());
         player2Frame.add(player2Board, BorderLayout.CENTER);
@@ -68,6 +73,8 @@ public class VSPlayerGameWindow {
         player2Frame.setSize(800, 800);
         player2Frame.setLocationRelativeTo(null);
         player2Frame.setVisible(false);
+
+        newGame();
     }
 
     private JPanel createPlayer1RadarPanel(){
@@ -82,7 +89,6 @@ public class VSPlayerGameWindow {
                 player1RadarButtons[i][j] = button;
                 int x = j;
                 int y = i;
-                button.setBackground(Color.BLUE);
 
                 button.addActionListener(e -> {
                     player2.getNavalBattle().shot(x, y);
@@ -94,26 +100,43 @@ public class VSPlayerGameWindow {
                     Ship ship = player2.getNavalBattle().getGrid()[y][x];
 
                     if(res == Impact.Hit){
+                        player2Buttons[y][x].setText("X");
+                        player2Buttons[y][x].setBackground(Color.RED);
+
                         button.setBackground(Color.RED);
-                        log.append("\n" + player1.getName() + ": Hit at (" + x + "," + y + ")");
+                        String message = player1.getName() + ": Hit at (" + x + "," + y + ")";
+                        addLogs(message);
                     }
                     else if(res == Impact.Sunk){
+                        player2Buttons[y][x].setText("X");
+                        player2Buttons[y][x].setBackground(Color.RED);
+
                         button.setBackground(Color.RED);
                         if(ship.getSize() == 5){
-                            log.append("\n" + player1.getName() + ": A pique el portaaviones (" + x + "," + y + ")");
+                            String message = player1.getName() + ": A pique el portaaviones (" + x + "," + y + ")";
+                            addLogs(message);
                         }
                         else{
-                            log.append("\n" + player1.getName() + ": Sunk at (" + x + "," + y + ")");
+                            player2Buttons[y][x].setText("X");
+                            String message = player1.getName() + ": Sunk at (" + x + "," + y + ")";
+                            addLogs(message);
                         }
                     }
                     else{
-                        log.append("\n" + player1.getName() + ": Miss at (" + x + "," + y + ")");
+                        player2Buttons[y][x].setBackground(Color.BLUE);
+                        button.setBackground(Color.BLUE);
+
+                        String message = player1.getName() + ": Miss at (" + x + "," + y + ")";
+                        addLogs(message);
                     }
 
                     refreshBorders();
                     updateSunkColor();
                     player2.checkDefeated();
-                    checkGameOver();
+                    boolean end = checkGameOver();
+                    if(end){
+                        return;
+                    }
                     player1Frame.setVisible(false);
 
                     JDialog dialog = new JDialog();
@@ -125,8 +148,11 @@ public class VSPlayerGameWindow {
                         player2Frame.setVisible(true);
                         dialog.dispose();
                     });
+                    dialog.add(nextButton);
+                    dialog.setVisible(true);
                 });
                 player1RadarPanel.add(button);
+                player1RadarPanel.setVisible(true);
             }
         }
         return player1RadarPanel;
@@ -144,7 +170,6 @@ public class VSPlayerGameWindow {
                 player2RadarButtons[i][j] = button;
                 int x = j;
                 int y = i;
-                button.setBackground(Color.BLUE);
 
                 button.addActionListener(e -> {
                     player1.getNavalBattle().shot(x, y);
@@ -156,26 +181,44 @@ public class VSPlayerGameWindow {
                     Ship ship = player1.getNavalBattle().getGrid()[y][x];
 
                     if(res == Impact.Hit){
+                        player1Buttons[y][x].setText("X");
+                        player1Buttons[y][x].setBackground(Color.RED);
+
                         button.setBackground(Color.RED);
-                        log.append("\n" + player2.getName() + ": Hit at (" + x + "," + y + ")");
+                        String message = player2.getName() + ": Hit at (" + x + "," + y + ")";
+                        addLogs(message);
                     }
                     else if(res == Impact.Sunk){
+                        player1Buttons[y][x].setText("X");
+                        player1Buttons[y][x].setBackground(Color.RED);
+
                         button.setBackground(Color.RED);
                         if(ship.getSize() == 5){
-                            log.append("\n" + player2.getName() + ": A pique el portaaviones (" + x + "," + y + ")");
+                            String message = player2.getName() + ": A pique el portaaviones (" + x + "," + y + ")";
+                            addLogs(message);
                         }
                         else{
-                            log.append("\n" + player2.getName() + ": Sunk at (" + x + "," + y + ")");
+                            String message = player2.getName() + ": Sunk at (" + x + "," + y + ")";
+                            addLogs(message);
                         }
                     }
                     else{
-                        log.append("\n" + player2.getName() + ": Miss at (" + x + "," + y + ")");
+                        player1Buttons[y][x].setText("X");
+                        player1Buttons[y][x].setBackground(Color.BLUE);
+
+                        button.setBackground(Color.BLUE);
+
+                        String message = player2.getName() + ": Miss at (" + x + "," + y + ")";
+                        addLogs(message);
                     }
 
                     refreshBorders();
                     updateSunkColor();
                     player1.checkDefeated();
-                    checkGameOver();
+                    boolean end = checkGameOver();
+                    if(end){
+                        return;
+                    }
                     player2Frame.setVisible(false);
 
                     JDialog dialog = new JDialog();
@@ -187,8 +230,11 @@ public class VSPlayerGameWindow {
                         player1Frame.setVisible(true);
                         dialog.dispose();
                     });
+                    dialog.add(nextButton);
+                    dialog.setVisible(true);
                 });
                 player2RadarPanel.add(button);
+                player2RadarPanel.setVisible(true);
             }
         }
         return player2RadarPanel;
@@ -257,6 +303,7 @@ public class VSPlayerGameWindow {
             if(ship.getSunk()){
                 for(Point point : ship.getPosition()){
                     player1Buttons[point.y][point.x].setBackground(new Color(150, 0, 0));
+                    player2RadarButtons[point.y][point.x].setBackground(new Color(150, 0, 0));
                 }
             }
         }
@@ -265,6 +312,7 @@ public class VSPlayerGameWindow {
             if(ship.getSunk()){
                 for(Point point : ship.getPosition()){
                     player2Buttons[point.y][point.x].setBackground(new Color(150, 0, 0));
+                    player1RadarButtons[point.y][point.x].setBackground(new Color(150, 0, 0));
                 }
             }
         }
@@ -299,7 +347,7 @@ public class VSPlayerGameWindow {
         }
     }
 
-    private void checkGameOver(){
+    private boolean checkGameOver(){
 
         String player1N = player1.getName();
         String player2N = player2.getName();
@@ -316,6 +364,7 @@ public class VSPlayerGameWindow {
             winButton.addActionListener(e -> {
                 player1WDialog.dispose();
                 player1Frame.dispose();
+                player2Frame.dispose();
 
                 UIMenu uiMenu = new UIMenu();
                 uiMenu.showUIMenu();
@@ -323,6 +372,7 @@ public class VSPlayerGameWindow {
 
             player1WDialog.add(winButton);
             player1WDialog.setVisible(true);
+            return true;
         }
         else if(player2.getLost()){
             JDialog player2WDialog = new JDialog(player2Frame, "Game Over", true);
@@ -336,6 +386,7 @@ public class VSPlayerGameWindow {
             winButton.addActionListener(e -> {
                 player2WDialog.dispose();
                 player2Frame.dispose();
+                player1Frame.dispose();
 
                 UIMenu uiMenu = new UIMenu();
                 uiMenu.showUIMenu();
@@ -343,7 +394,9 @@ public class VSPlayerGameWindow {
 
             player2WDialog.add(winButton);
             player2WDialog.setVisible(true);
+            return true;
         }
+        return false;
     }
 
     public void newGame(){
@@ -359,6 +412,8 @@ public class VSPlayerGameWindow {
                 player1Frame.setVisible(true);
                 dialog.dispose();
             });
+            dialog.add(nextButton);
+            dialog.setVisible(true);
         }
         else{
             JDialog dialog = new JDialog();
@@ -369,6 +424,14 @@ public class VSPlayerGameWindow {
                 player2Frame.setVisible(true);
                 dialog.dispose();
             });
+            dialog.add(nextButton);
+            dialog.setVisible(true);
         }
+    }
+
+    private void addLogs(String message){
+
+        log1.append("\n" + message);
+        log2.append("\n" + message);
     }
 }
