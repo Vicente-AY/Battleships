@@ -7,6 +7,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Clase que simula un jugador
+ */
 public class Player {
 
     String name = null;
@@ -15,11 +18,20 @@ public class Player {
     Ship[] ships = new Ship[]{new Ship("Carrier", 5), new Ship("Battleship", 4), new Ship("Cruiser", 3), new Ship("Submarine", 2), new Ship("Patrol Boat", 1)};
     boolean lost = false;
 
+    /**
+     * Consturctor de la clase
+     * @param name identificador del jugador
+     */
     public Player(String name){
 
         this.name = name;
     }
 
+    /**
+     * Deprecated
+     * Metodo que simula un disparo por parte del jugador
+     * @param cpu jugador controlado por el programa
+     */
     public void shot(IA cpu){
 
         Scanner input = new Scanner(System.in);
@@ -45,6 +57,9 @@ public class Player {
         cpu.checkDefeated();
     }
 
+    /**
+     * Metodo que determina, comprobando cuantos barcos quedan a flote, si un jugador ha perdido
+     */
     public void checkDefeated(){
 
         boolean defeated = true;
