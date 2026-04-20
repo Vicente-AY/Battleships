@@ -1,6 +1,5 @@
 package gui;
 
-import game.VsCPU;
 import player.IA;
 import player.Player;
 

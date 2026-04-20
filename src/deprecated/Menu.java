@@ -1,10 +1,13 @@
-package game;
+package deprecated;
 
 import player.IA;
 import player.Player;
 
 import java.util.Scanner;
 
+/**
+ * Clase deprecated por el añadido de la interfaz grafica. Usada como fase inicial del proyecto para juego por consola
+ */
 public class Menu {
 
     IA cpu = new IA();
